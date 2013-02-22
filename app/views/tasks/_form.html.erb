@@ -1,0 +1,20 @@
+<%= form_for @task, :html => { :class => 'form-horizontal' } do |f| %>
+  <div class="control-group">
+    <%= f.label :description, :class => 'control-label' %>
+    <div class="controls">
+      <%= f.text_area :description, :class => 'text_area', :size => "50x3" %>
+    </div>
+    <br>
+    <%= label_tag 'Assigned to', nil, :class => 'control-label' %>
+    <div class="controls">
+      <%= select_tag 'assigned', options_from_collection_for_select(User.find(:all).map{|u| [u.id, u.email]}, :first, :last, @task.users.map{|u| u.id.to_s}), :multiple => true %>
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+    <%= f.submit nil, :class => 'btn btn-primary' %>
+    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                tasks_path, :class => 'btn' %>
+  </div>
+<% end %>

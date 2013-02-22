@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task Manager</title>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+  <![endif]-->
+  <link rel="stylesheet" type="text/css" href="<%= asset_path('application.css') %>">
+  <script src="<%= asset_path('application.js') %>" type="text/javascript"></script>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="<%= params[:controller] %>">
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="<%= root_path %>">Task Manager</a>
+        <% if current_user %>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><%= link_to 'My Tasks', tasks_path %></li>
+              <li><%= link_to 'Other Tasks', other_tasks_path %></li>
+            </ul>
+          </div>
+        <% end %>
+        <ul class="nav pull-right">
+          <%= render_sign_up %>
+          <li class="divider-vertical"></li>
+          <% if current_user %>
+            <li class="dropdown">
+              <a href='#' class='dropdown-toggle' data-toggle='dropdown'><%= current_user.email %> <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#"></a></li>
+                <li><a href="<%= logout_path %>"> Log out</a></li>
+              </ul>
+            </li>
+          <% else %>
+            <%= render_log_in %>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <% flash.each do |name, msg| %>
+    <div class="alert alert-<%= name == :notice ? "success" : "error" %>">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <%= msg %>
+    </div>
+    <% end %>
+    <%= yield %>
+  </div>
+</body>
+</html>
