@@ -24,14 +24,14 @@ class TasksController < ApplicationController
 
   # GET /tasks/1
   # GET /tasks/1.json
-  def show
-    @task = Task.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @task }
-    end
-  end
+  # def show
+    # @task = Task.find(params[:id])
+# 
+    # respond_to do |format|
+      # format.html # show.html.erb
+      # format.json { render json: @task }
+    # end
+  # end
 
   # GET /tasks/new
   # GET /tasks/new.json
@@ -108,16 +108,12 @@ class TasksController < ApplicationController
       users = task.users
       users.each do |user|
         tasks_user = user.tasks_users.find_by_task_id(task.id)
-        p tasks_user
         tasks_user.destroy if tasks_user
       end
     else
       assign_list = assign_list.map{|id| id.to_i}
-      p "assign_list: #{assign_list}"
       current_list = task.users.map{|user| user.id}
-      p "current_list: #{current_list}"
       assign_add_list = assign_list - current_list
-      p "assign_add_list: #{assign_add_list}"
       assign_add_list.each do |user_id|
         tasks_user = TasksUser.new({
           :user_id => user_id,
@@ -131,11 +127,8 @@ class TasksController < ApplicationController
       end
       
       assign_remove_list = current_list - assign_list
-      p "assign_remove_list: #{assign_remove_list}"
       assign_remove_list.each do |user_id|
-        p "user_id: #{user_id}, task.id: #{task.id}"
         tasks_user = User.find(user_id).tasks_users.find_by_user_id_and_task_id(user_id, task.id)
-        p "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Removed: #{tasks_user}"
         unless tasks_user.destroy
           error = tasks_user.errors.messages[:description]
           flash.now.alert = error.first if error && error.first
